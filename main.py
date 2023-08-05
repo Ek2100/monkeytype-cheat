@@ -1,6 +1,14 @@
 # ------------------------------------------------------------------------------
 # WARNING: USE AT YOUR OWN RISK
 # ------------------------------------------------------------------------------
+import time
+import random
+from pynput.keyboard import Controller
+from bs4 import BeautifulSoup
+
+# ------------------------------------------------------------------------------
+# WARNING: USE AT YOUR OWN RISK
+# ------------------------------------------------------------------------------
 # © Copyright 2023
 # ------------------------------------------------------------------------------
 # DISCLAIMER: This bot is in violation of MonkeyType's terms of service. 
@@ -35,28 +43,36 @@ from bs4 import BeautifulSoup
 # ------------------------------------------------------------------------------
 # CONFIGURATION (change if you want)
 # ------------------------------------------------------------------------------
-typo_chance = 15  # Percentage chance of making a typo (10% chance)
-character_entry_time_min = 0.07  # Minimum time delay between typing each character (low amount, 0.05 seconds)
-character_entry_time_max = 0.13  # Maximum time delay between typing each character (high amount, 0.09 seconds)
+typo_chance = 13  # Percentage chance of making a typo (10% chance)
+character_entry_time_min = 0.05  # Minimum time delay between typing each character (low amount, 0.05 seconds)
+character_entry_time_max = 0.09  # Maximum time delay between typing each character (high amount, 0.09 seconds)
+outlier_chance = 3  # Percentage chance of having an outlier delay (3% chance)
+outlier_high_min = 0.5  # Minimum time for an outlier high (seconds)
+outlier_high_max = 1.0  # Maximum time for an outlier high (seconds)
+outlier_low_min = 0.01  # Minimum time for an outlier low (seconds)
+outlier_low_max = 0.03  # Maximum time for an outlier low (seconds)
 test_time = 15  # The time the typing test goes for (in seconds)
 # ------------------------------------------------------------------------------
 # END OF CONFIGURATION (dont change)
 # ------------------------------------------------------------------------------
 
-
-
-# ------------------------------------------------------------------------------
-# Start Of Code
-# ------------------------------------------------------------------------------
-
 keyboard = Controller() 
+
+def add_outlier_delay():
+    if random.random() < outlier_chance / 100:
+        if random.random() < 0.5:  # 50% chance for an outlier high
+            return random.uniform(outlier_high_min, outlier_high_max)
+        else:
+            return random.uniform(outlier_low_min, outlier_low_max)
+    return 0.0  # Normal delay
 
 def type_string_with_delay(string):
     start_time = time.time()  
     for character in string: 
         keyboard.type(character) 
-        sleeptime = random.uniform(character_entry_time_min, character_entry_time_max)
-        time.sleep(sleeptime)
+        sleep_time = random.uniform(character_entry_time_min, character_entry_time_max)
+        sleep_time += add_outlier_delay()  # Add the outlier delay (if any)
+        time.sleep(sleep_time)
         elapsed_time = time.time() - start_time 
         if elapsed_time > test_time:
             quit() 
@@ -79,8 +95,6 @@ string_to_type = ' '.join(words)
 
 time.sleep(2)
 type_string_with_delay(string_to_type)
-
-
 
 # ------------------------------------------------------------------------------
 # WARNING: USE AT YOUR OWN RISK
