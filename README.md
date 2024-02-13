@@ -15,7 +15,7 @@ How to use:
 7. Run the Python script. It will read the words from "words.txt," simulate typing with occasional typos, and type them into the typing test.
 8. Sit back and watch the bot take the typing test for you! (Remember, using this bot is against MonkeyType's website's terms of service, so use it at your own risk).
 
-### Note: The words.txt file currently contains a demo set of data from a test. You should change it for it work correctly
+### Note: The words.txt file currently contains nothing. You should change it for it work correctly
 
 Configuration:
 - typo_chance: Percentage chance of making a typo (default: 15%).
